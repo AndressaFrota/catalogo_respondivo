@@ -6,14 +6,14 @@
  * CONFIGURAÇÕES — edite aqui:
  */
 
-const SPREADSHEET_ID = '1dPM_ZAqEKT6hZ7hWVh9YdQ2C2_eo1yvz0jfnA6ILunA';
+const SPREADSHEET_ID = 'd/1r8pnLeu-nzwrX1oCyfyWGWgzDGQba7biMf_s-RrVS3k/edit?usp=sharing';
 const SHEET_NAME     = 'Conteudos';
 
 const FOLDER_IDS = {
-  novidades:        '1xFj6UIBTU-XFuF4wfBznqZdkbAavtmji',
-  vendas:           '1DvwiTdZREM2AB24YtsfaJQtZ04EufkOX',
-  fornecedores:     '1AvprrY2isedTrEhKE8cBKua8aP10IoUB',
-  escola:           '1uuWEowAo81W6xPkgNuNTpZMP79RlRBTX',
+  novidades:        '1xFj6UIBTU-XFuF4wfBznqZdkbAavtmji?usp=drive_link',
+  vendas:           '1DvwiTdZREM2AB24YtsfaJQtZ04EufkOX?usp=drive_link',
+  fornecedores:     '1AvprrY2isedTrEhKE8cBKua8aP10IoUB?usp=drive_link',
+  escola:           '1uuWEowAo81W6xPkgNuNTpZMP79RlRBTX?usp=drive_link',
 };
 
 // ─── Ponto de entrada HTTP GET ───────────────────────────────────────────────
