@@ -7,7 +7,7 @@ const CONFIG = {
 
   // ─── API ────────────────────────────────────────────────────────────────────
   // Cole aqui a URL gerada após publicar o Apps Script como Web App
-  API_URL: 'https://script.google.com/macros/s/AKfycbztkJSFN7PJTMT5_UWt1tyf-zaiiCDESTxr7KBqZzlO2p-JM1HT46WPjfn_7HvLN9f0QA/exec',
+  API_URL: 'https://script.google.com/macros/s/AKfycbwOXdOSE4kP6vk9uzR-h2JorDBOIRWJCVfNDbqwzsY61_F_ybndsvZhrTUkQnkSiWwAog/exec',
 
   // ─── IDs das Pastas do Google Drive ─────────────────────────────────────────
   // Para obter o ID: abra a pasta → copie o trecho após /folders/ na URL
