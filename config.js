@@ -19,7 +19,7 @@ const CONFIG = {
   },
 
   // ─── Planilha ────────────────────────────────────────────────────────────────
-  SPREADSHEET_ID: 'd/1r8pnLeu-nzwrX1oCyfyWGWgzDGQba7biMf_s-RrVS3k/edit?usp=sharing',
+  SPREADSHEET_ID: '1r8pnLeu-nzwrX1oCyfyWGWgzDGQba7biMf_s-RrVS3k/edit?usp=sharing',
   SHEET_NAME: 'Conteudos',
 
   // ─── Cache ───────────────────────────────────────────────────────────────────
