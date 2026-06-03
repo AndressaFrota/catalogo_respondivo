@@ -12,10 +12,10 @@ const CONFIG = {
   // ─── IDs das Pastas do Google Drive ─────────────────────────────────────────
   // Para obter o ID: abra a pasta → copie o trecho após /folders/ na URL
   FOLDER_IDS: {
-    novidades:        '1xFj6UIBTU-XFuF4wfBznqZdkbAavtmji?usp=drive_link',
-    vendas:           '1DvwiTdZREM2AB24YtsfaJQtZ04EufkOX?usp=drive_link',
-    fornecedores:     '1AvprrY2isedTrEhKE8cBKua8aP10IoUB?usp=drive_link',
-    escola:           '1uuWEowAo81W6xPkgNuNTpZMP79RlRBTX?usp=drive_link',
+    novidades:        '1_kSHl5GSXlByQNlC72bMemY9c-L9Al8Q',
+    vendas:           '1l95-kHeW1DkIbsIdWaAFXxSUc1XOZMGW',
+    fornecedores:     '19nQ-d2sY4cDkE9RI_yEm0WXaATBLiUTZ',
+    escola:           '1jz_-QR8nCyVPvxv_Rub8ATS3S6S8UdQy',
   },
 
   // ─── Planilha ────────────────────────────────────────────────────────────────
