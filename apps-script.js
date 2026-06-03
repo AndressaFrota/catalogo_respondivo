@@ -6,7 +6,7 @@
  * CONFIGURAÇÕES — edite aqui:
  */
 
-const SPREADSHEET_ID = 'd/1r8pnLeu-nzwrX1oCyfyWGWgzDGQba7biMf_s-RrVS3k/edit?usp=sharing';
+const SPREADSHEET_ID = '1r8pnLeu-nzwrX1oCyfyWGWgzDGQba7biMf_s-RrVS3k';
 const SHEET_NAME     = 'Conteudos';
 
 const FOLDER_IDS = {
