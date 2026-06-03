@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portal interno de treinamentos e comunicação D'Furlan Planejados" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Portal D'Furlan — Treinamentos e Comunicação</title>
+
+  <!-- Preconnect fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Favicon inline -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23CA9833'/><text y='22' x='7' font-size='18' font-family='sans-serif' fill='%23000'>D</text></svg>" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── Loading Overlay ──────────────────────────────────────── -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-content">
+    <div class="loading-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <div class="loading-bar"><div class="loading-bar-fill"></div></div>
+    <p class="loading-text">Carregando conteúdos…</p>
+  </div>
+</div>
+
+<!-- ── Sidebar overlay (mobile) ──────────────────────────────── -->
+<div class="sidebar-overlay"></div>
+
+<!-- ── App Shell ─────────────────────────────────────────────── -->
+<div class="app-shell">
+
+  <!-- ── Sidebar ────────────────────────────────────────────── -->
+  <aside class="sidebar" role="navigation" aria-label="Menu principal">
+
+    <!-- Brand -->
+    <div class="sidebar-brand">
+      <div class="sidebar-logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div class="sidebar-brand-text">
+        <span class="sidebar-brand-name">D'Furlan</span>
+        <span class="sidebar-brand-sub">Portal Interno</span>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="sidebar-nav">
+
+      <span class="nav-section-label">Principal</span>
+
+      <button class="nav-item active" data-page="home" aria-current="page">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Início
+      </button>
+
+      <span class="nav-section-label" style="margin-top:8px">Conteúdos</span>
+
+      <button class="nav-item" data-page="novidades">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        Novidades
+        <span class="nav-badge" id="navBadge_novidades" style="display:none"></span>
+      </button>
+
+      <button class="nav-item" data-page="vendas">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        Venda e Negociação
+        <span class="nav-badge" id="navBadge_vendas" style="display:none"></span>
+      </button>
+
+      <button class="nav-item" data-page="fornecedores">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="7" width="20" height="14" rx="2"/>
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+        </svg>
+        Fornecedores
+        <span class="nav-badge" id="navBadge_fornecedores" style="display:none"></span>
+      </button>
+
+      <button class="nav-item" data-page="escola">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        Escola D'Furlan
+        <span class="nav-badge" id="navBadge_escola" style="display:none"></span>
+      </button>
+
+      <span class="nav-section-label" style="margin-top:8px">Você</span>
+
+      <button class="nav-item" data-page="favoritos">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+        </svg>
+        Meus Favoritos
+        <span class="nav-badge" id="favBadge" style="display:none"></span>
+      </button>
+
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+      <div style="font-size:.7rem;color:var(--text-muted);padding:0 12px 8px;line-height:1.5">
+        © 2025 D'Furlan Planejados<br>Portal Interno v1.0
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── Main ───────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- ── Topbar ────────────────────────────────────────────── -->
+    <header class="topbar">
+      <button class="topbar-hamburger icon-btn" id="hamburger" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <span class="topbar-title">Portal D'Furlan</span>
+
+      <!-- Search -->
+      <div class="search-bar" role="search">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="search"
+          id="globalSearch"
+          placeholder="Buscar conteúdos, categorias…"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Busca global"
+        />
+        <div class="search-clear" role="button" aria-label="Limpar busca" tabindex="0">✕</div>
+      </div>
+
+      <!-- Actions -->
+      <div class="topbar-actions">
+        <button class="icon-btn" id="refreshBtn" title="Atualizar conteúdos" aria-label="Atualizar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        </button>
+
+        <button class="icon-btn" id="themeToggle" title="Alternar tema" aria-label="Modo escuro">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Error Banner ───────────────────────────────────────── -->
+    <div class="error-banner" id="errorBanner" role="alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span class="error-text">Erro ao carregar dados.</span>
+      <button onclick="fetchData(true)" style="margin-left:auto;font-weight:700;color:inherit;text-decoration:underline;cursor:pointer;background:none;border:none;font-family:inherit;font-size:inherit">Tentar novamente</button>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════
+         PAGE: HOME
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="page active" id="page-home">
+
+      <div class="page-header">
+        <div class="page-eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Bem-vindo
+        </div>
+        <h1 class="page-title">Portal D'Furlan</h1>
+        <p class="page-desc">Sua central de treinamentos, novidades e materiais de apoio à equipe comercial.</p>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(202,152,51,.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#CA9833" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            </svg>
+          </div>
+          <div class="stat-value" id="statTotal">—</div>
+          <div class="stat-label">Total de Conteúdos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(202,152,51,.12)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#CA9833" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </div>
+          <div class="stat-value" id="statNovidades">—</div>
+          <div class="stat-label">Novidades</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(37,99,235,.08)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <div class="stat-value" id="statVendas">—</div>
+          <div class="stat-label">Venda e Negociação</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(124,58,237,.08)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          <div class="stat-value" id="statEscola">—</div>
+          <div class="stat-label">Escola D'Furlan</div>
+        </div>
+      </div>
+
+      <!-- Destaques carousel -->
+      <div class="section" id="homeDefaultSections">
+        <div class="section-header">
+          <h2 class="section-title">⭐ Destaques da Semana</h2>
+        </div>
+        <div class="carousel-wrapper" id="carouselWrapper">
+          <!-- Renderizado via JS -->
+        </div>
+      </div>
+
+      <!-- Category Cards -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">Explorar Categorias</h2>
+        </div>
+        <div class="category-grid">
+          <div class="category-card cc-novidades" data-cat="novidades" role="button" tabindex="0" aria-label="Novidades">
+            <div class="category-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              </svg>
+            </div>
+            <div class="category-card-info">
+              <div class="category-card-label">Novidades</div>
+              <div class="category-card-count" id="catCount_novidades">0 conteúdos</div>
+            </div>
+            <div class="category-card-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <div class="category-card cc-vendas" data-cat="vendas" role="button" tabindex="0" aria-label="Venda e Negociação">
+            <div class="category-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <div class="category-card-info">
+              <div class="category-card-label">Venda e Negociação</div>
+              <div class="category-card-count" id="catCount_vendas">0 conteúdos</div>
+            </div>
+            <div class="category-card-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <div class="category-card cc-fornecedores" data-cat="fornecedores" role="button" tabindex="0" aria-label="Fornecedores">
+            <div class="category-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2"/>
+                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+              </svg>
+            </div>
+            <div class="category-card-info">
+              <div class="category-card-label">Fornecedores</div>
+              <div class="category-card-count" id="catCount_fornecedores">0 conteúdos</div>
+            </div>
+            <div class="category-card-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <div class="category-card cc-escola" data-cat="escola" role="button" tabindex="0" aria-label="Escola D'Furlan">
+            <div class="category-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+              </svg>
+            </div>
+            <div class="category-card-info">
+              <div class="category-card-label">Escola D'Furlan</div>
+              <div class="category-card-count" id="catCount_escola">0 conteúdos</div>
+            </div>
+            <div class="category-card-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recentes -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">Últimos Adicionados</h2>
+          <button class="section-link" data-page="novidades" onclick="navigate('novidades')">
+            Ver todos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+        <div id="homeRecentes"><!-- JS --></div>
+      </div>
+
+      <!-- Search results (hidden by default) -->
+      <div id="homeSearchSection" style="display:none" class="section">
+        <div class="section-header">
+          <h2 class="section-title">Resultados de busca</h2>
+          <span id="searchResultCount" style="font-size:.8125rem;color:var(--text-muted)"></span>
+        </div>
+        <div id="searchResultsGrid"></div>
+      </div>
+
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         PAGE: NOVIDADES
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-novidades">
+      <div class="page-header">
+        <div class="page-eyebrow" style="color:var(--cat-novidades)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          Categoria
+        </div>
+        <h1 class="page-title">Novidades</h1>
+        <p class="page-desc">Comunicados, atualizações e novidades da D'Furlan Planejados.</p>
+      </div>
+
+      <div class="filters-bar">
+        <button class="filter-chip active" data-type="all">Todos</button>
+        <button class="filter-chip" data-type="video">Vídeo</button>
+        <button class="filter-chip" data-type="pdf">PDF</button>
+        <button class="filter-chip" data-type="documento">Documento</button>
+        <button class="filter-chip" data-type="destaque">⭐ Destaques</button>
+        <select class="sort-select" aria-label="Ordenar por">
+          <option value="recent">Mais recentes</option>
+          <option value="oldest">Mais antigos</option>
+          <option value="alpha">A–Z</option>
+          <option value="order">Ordem manual</option>
+        </select>
+        <span class="filters-count" id="count_novidades"></span>
+      </div>
+
+      <div id="content_novidades"></div>
+      <div id="pag_novidades"></div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         PAGE: VENDA E NEGOCIAÇÃO
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-vendas">
+      <div class="page-header">
+        <div class="page-eyebrow" style="color:var(--cat-vendas)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          Categoria
+        </div>
+        <h1 class="page-title">Venda e Negociação</h1>
+        <p class="page-desc">Treinamentos de técnicas de vendas, negociação e gestão de objeções.</p>
+      </div>
+
+      <div class="filters-bar">
+        <button class="filter-chip active" data-type="all">Todos</button>
+        <button class="filter-chip" data-type="video">Vídeo</button>
+        <button class="filter-chip" data-type="pdf">PDF</button>
+        <button class="filter-chip" data-type="apresentacao">Apresentação</button>
+        <button class="filter-chip" data-type="destaque">⭐ Destaques</button>
+        <select class="sort-select" aria-label="Ordenar por">
+          <option value="recent">Mais recentes</option>
+          <option value="oldest">Mais antigos</option>
+          <option value="alpha">A–Z</option>
+          <option value="order">Ordem manual</option>
+        </select>
+        <span class="filters-count" id="count_vendas"></span>
+      </div>
+
+      <div id="content_vendas"></div>
+      <div id="pag_vendas"></div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         PAGE: FORNECEDORES
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-fornecedores">
+      <div class="page-header">
+        <div class="page-eyebrow" style="color:var(--cat-fornecedores)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+          </svg>
+          Categoria
+        </div>
+        <h1 class="page-title">Fornecedores</h1>
+        <p class="page-desc">Catálogos, vídeos institucionais, apresentações e materiais técnicos dos parceiros.</p>
+      </div>
+
+      <div class="filters-bar">
+        <button class="filter-chip active" data-type="all">Todos</button>
+        <button class="filter-chip" data-type="video">Vídeo</button>
+        <button class="filter-chip" data-type="pdf">PDF</button>
+        <button class="filter-chip" data-type="apresentacao">Apresentação</button>
+        <button class="filter-chip" data-type="imagem">Imagem</button>
+        <button class="filter-chip" data-type="destaque">⭐ Destaques</button>
+        <select class="sort-select" aria-label="Ordenar por">
+          <option value="recent">Mais recentes</option>
+          <option value="oldest">Mais antigos</option>
+          <option value="alpha">A–Z</option>
+          <option value="order">Ordem manual</option>
+        </select>
+        <span class="filters-count" id="count_fornecedores"></span>
+      </div>
+
+      <div id="content_fornecedores"></div>
+      <div id="pag_fornecedores"></div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         PAGE: ESCOLA D'FURLAN
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-escola">
+      <div class="page-header">
+        <div class="page-eyebrow" style="color:var(--cat-escola)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+          Categoria
+        </div>
+        <h1 class="page-title">Escola D'Furlan</h1>
+        <p class="page-desc">Onboarding, treinamentos internos e trilhas de desenvolvimento profissional.</p>
+      </div>
+
+      <div class="filters-bar">
+        <button class="filter-chip active" data-type="all">Todos</button>
+        <button class="filter-chip" data-type="video">Vídeo</button>
+        <button class="filter-chip" data-type="pdf">PDF</button>
+        <button class="filter-chip" data-type="apresentacao">Apresentação</button>
+        <button class="filter-chip" data-type="destaque">⭐ Destaques</button>
+        <select class="sort-select" aria-label="Ordenar por">
+          <option value="recent">Mais recentes</option>
+          <option value="oldest">Mais antigos</option>
+          <option value="alpha">A–Z</option>
+          <option value="order">Ordem manual</option>
+        </select>
+        <span class="filters-count" id="count_escola"></span>
+      </div>
+
+      <div id="content_escola"></div>
+      <div id="pag_escola"></div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         PAGE: FAVORITOS
+    ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-favoritos">
+      <div class="page-header">
+        <div class="page-eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+          </svg>
+          Coleção pessoal
+        </div>
+        <h1 class="page-title">Meus Favoritos</h1>
+        <p class="page-desc">Conteúdos salvos. Seus favoritos ficam guardados neste navegador.</p>
+      </div>
+      <div id="content_favoritos"></div>
+    </section>
+
+  </main><!-- /main-content -->
+</div><!-- /app-shell -->
+
+<!-- ── Modal de Conteúdo ────────────────────────────────────── -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-info">
+        <span class="modal-category-badge" id="modalCategoryBadge"></span>
+        <h2 class="modal-title" id="modalTitle"></h2>
+        <p class="modal-meta" id="modalMeta"></p>
+      </div>
+      <button class="modal-close" id="modalCloseBtn" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <iframe
+        id="modalEmbed"
+        class="modal-embed"
+        allow="autoplay; fullscreen"
+        allowfullscreen
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+        title="Visualizador de conteúdo"
+      ></iframe>
+
+      <div class="modal-desc-section" id="modalDescSection" style="display:none">
+        <p id="modalDescText"></p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <a
+        id="modalOpenBtn"
+        class="btn btn-primary"
+        target="_blank"
+        rel="noopener noreferrer"
+        href="#"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        Abrir no Drive
+      </a>
+
+      <button id="modalFavBtn" class="btn btn-secondary" data-id="">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+        </svg>
+        Favoritar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast Container ──────────────────────────────────────── -->
+<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+<!-- ── Scripts ─────────────────────────────────────────────── -->
+<script src="config.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
