@@ -7,19 +7,19 @@ const CONFIG = {
 
   // ─── API ────────────────────────────────────────────────────────────────────
   // Cole aqui a URL gerada após publicar o Apps Script como Web App
-  API_URL: 'https://script.google.com/a/macros/dfurlan.com.br/s/AKfycbwPqSDU4eptyX703hr0P85T7oC_Po96JpJBcqICYKDXca4aWoJi-64Mbfb27FT2c8Om5A/exec',
+  API_URL: 'https://script.google.com/macros/s/AKfycbztkJSFN7PJTMT5_UWt1tyf-zaiiCDESTxr7KBqZzlO2p-JM1HT46WPjfn_7HvLN9f0QA/exec',
 
   // ─── IDs das Pastas do Google Drive ─────────────────────────────────────────
   // Para obter o ID: abra a pasta → copie o trecho após /folders/ na URL
   FOLDER_IDS: {
-    novidades:        '1xFj6UIBTU-XFuF4wfBznqZdkbAavtmji',
-    vendas:           '1DvwiTdZREM2AB24YtsfaJQtZ04EufkOX',
-    fornecedores:     '1AvprrY2isedTrEhKE8cBKua8aP10IoUB',
-    escola:           '1uuWEowAo81W6xPkgNuNTpZMP79RlRBTX',
+    novidades:        '1xFj6UIBTU-XFuF4wfBznqZdkbAavtmji?usp=drive_link',
+    vendas:           '1DvwiTdZREM2AB24YtsfaJQtZ04EufkOX?usp=drive_link',
+    fornecedores:     '1AvprrY2isedTrEhKE8cBKua8aP10IoUB?usp=drive_link',
+    escola:           '1uuWEowAo81W6xPkgNuNTpZMP79RlRBTX?usp=drive_link',
   },
 
   // ─── Planilha ────────────────────────────────────────────────────────────────
-  SPREADSHEET_ID: '1dPM_ZAqEKT6hZ7hWVh9YdQ2C2_eo1yvz0jfnA6ILunA',
+  SPREADSHEET_ID: 'd/1r8pnLeu-nzwrX1oCyfyWGWgzDGQba7biMf_s-RrVS3k/edit?usp=sharing',
   SHEET_NAME: 'Conteudos',
 
   // ─── Cache ───────────────────────────────────────────────────────────────────
