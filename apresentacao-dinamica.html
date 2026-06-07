@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa Embaixadores D'Furlan</title>
+    <style>
+        :root {
+            --color-bg: #111216;
+            --color-bg-deep: #090a0d;
+            --color-surface: #1a1d23;
+            --color-text: #f7f4ee;
+            --color-text-secondary: #ddd5c8;
+            --color-text-muted: #b3aa9a;
+            --color-accent-1: #c89b3c;
+            --color-accent-2: #e6d3a5;
+            --color-accent-3: #8f6a25;
+            --color-glass-bg: rgba(255,255,255,0.06);
+            --color-glass-border: rgba(255,255,255,0.10);
+            --color-vignette: rgba(0,0,0,0.45);
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            background: var(--color-bg);
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .deck {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: all;
+        }
+
+        .slide > .content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1180px;
+            padding: clamp(1.5rem, 4vw, 4rem);
+        }
+
+        .nav-controls {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            z-index: 100;
+            background: rgba(17,18,22,0.55);
+            backdrop-filter: blur(10px);
+            padding: 10px 22px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255,255,255,0.08);
+            color: #e6d3a5;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        .slide-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .slide-dots .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.18);
+            cursor: pointer;
+            transition: all .3s;
+        }
+
+        .slide-dots .dot.active {
+            background: #c89b3c;
+            transform: scale(1.3);
+        }
+
+        .slide-counter {
+            font-size: .8rem;
+            color: #ddd5c8;
+            min-width: 48px;
+            text-align: center;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .gradient-mesh {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: float-slow 12s ease-in-out infinite;
+        }
+
+        .blob:nth-child(2) {
+            animation: float-drift 16s ease-in-out infinite;
+        }
+
+        .blob:nth-child(3) {
+            animation: float-slow 18s ease-in-out infinite reverse;
+        }
+
+        .blob:nth-child(4) {
+            animation: float-drift 20s ease-in-out infinite reverse;
+        }
+
+        @keyframes float-slow {
+            0% { transform: translate(0,0) scale(1); }
+            25% { transform: translate(50px,-35px) scale(1.08); }
+            50% { transform: translate(-30px,25px) scale(.92); }
+            75% { transform: translate(30px,20px) scale(1.05); }
+            100% { transform: translate(0,0) scale(1); }
+        }
+
+        @keyframes float-drift {
+            0% { transform: translate(0,0) scale(1) rotate(0deg); }
+            33% { transform: translate(-45px,-55px) scale(1.12) rotate(3deg); }
+            66% { transform: translate(40px,28px) scale(.9) rotate(-2deg); }
+            100% { transform: translate(0,0) scale(1) rotate(0deg); }
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+            opacity: .025;
+            mix-blend-mode: overlay;
+        }
+
+        .slide::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 48%, rgba(0,0,0,.45) 100%);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 20px rgba(200,155,60,.45), 0 0 40px rgba(200,155,60,.18);
+        }
+
+        .bar-track {
+            width: 100%;
+            height: 18px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #c89b3c, #e6d3a5);
+            width: 0%;
+        }
+
+        .card-hover {
+            transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 45px rgba(0,0,0,.22);
+            border-color: rgba(230,211,165,.26);
+        }
+
+        .logo-chip {
+            background: rgba(255,255,255,.92);
+            padding: 18px 28px;
+            border-radius: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,.18);
+        }
+
+        .section-label {
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            font-size: .78rem;
+            color: #e6d3a5;
+        }
+
+        .mini-kpi {
+            border: 1px solid rgba(255,255,255,.10);
+            background: rgba(255,255,255,.05);
+            backdrop-filter: blur(12px);
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        /* Utility classes */
+        .text-center { text-align: center; }
+        .grid { display: grid; }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        .items-start { align-items: flex-start; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-5 { margin-bottom: 1.25rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .max-w-fit { max-width: fit-content; }
+        .max-w-\[860px\] { max-width: 860px; }
+        .font-display { font-family: var(--font-display); }
+        .font-semibold { font-weight: 600; }
+        .text-accent-2 { color: #e6d3a5; }
+        .text-text-secondary { color: #ddd5c8; }
+        .leading-relaxed { line-height: 1.625; }
+        .leading-\[0.95\] { line-height: 0.95; }
+        .tracking-tight { letter-spacing: -0.02em; }
+        .bg-linear-to-br { background: linear-gradient(135deg, #c89b3c, #e6d3a5, #c89b3c); }
+        .bg-clip-text { -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .inline-flex { display: inline-flex; }
+        .items-center { align-items: center; }
+        .rounded-full { border-radius: 9999px; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .gap-3 { gap: 0.75rem; }
+        .flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .text-sm { font-size: 0.875rem; }
+        .bg-white\/6 { background-color: rgba(255, 255, 255, 0.06); }
+        .border-white\/10 { border-color: rgba(255, 255, 255, 0.10); }
+        .backdrop-blur-xl { backdrop-filter: blur(20px); }
+        .max-h-\[90px\] { max-height: 90px; }
+        .max-w-\[320px\] { max-width: 320px; }
+        .object-contain { object-fit: contain; }
+
+        .text-\[clamp\(2.9rem\,6vw\,5.6rem\)\] { font-size: clamp(2.9rem, 6vw, 5.6rem); }
+        .text-\[clamp\(1rem\,1.8vw\,1.35rem\)\] { font-size: clamp(1rem, 1.8vw, 1.35rem); }
+        .text-\[clamp\(2.1rem\,4.6vw\,3.4rem\)\] { font-size: clamp(2.1rem, 4.6vw, 3.4rem); }
+        .text-\[1.4rem\] { font-size: 1.4rem; }
+        .text-\[clamp\(2rem\,4.3vw\,3.2rem\)\] { font-size: clamp(2rem, 4.3vw, 3.2rem); }
+        .text-\[1.3rem\] { font-size: 1.3rem; }
+        .text-\[clamp\(2rem\,4.2vw\,3.1rem\)\] { font-size: clamp(2rem, 4.2vw, 3.1rem); }
+        .text-\[1.25rem\] { font-size: 1.25rem; }
+        .text-\[1.35rem\] { font-size: 1.35rem; }
+        .text-\[clamp\(2rem\,4.2vw\,3rem\)\] { font-size: clamp(2rem, 4.2vw, 3rem); }
+        .text-\[1.2rem\] { font-size: 1.2rem; }
+        .text-\[clamp\(2.6rem\,5.4vw\,4.8rem\)\] { font-size: clamp(2.6rem, 5.4vw, 4.8rem); }
+        .text-\[clamp\(1rem\,1.8vw\,1.28rem\)\] { font-size: clamp(1rem, 1.8vw, 1.28rem); }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="deck" id="deck"></div>
+
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="changeSlide(-1)">❮</button>
+        <div class="slide-dots" id="dots"></div>
+        <div class="slide-counter" id="counter">1 / 9</div>
+        <button class="nav-btn" onclick="changeSlide(1)">❯</button>
+    </div>
+
+    <script>
+        // JSON Data
+        const presentationData = {
+  "name": "Programa Embaixadores D'Furlan",
+  "canvasFormat": {
+    "version": "1.0",
+    "type": "slide-deck",
+    "language": "pt-BR"
+  },
+  "meta": {
+    "title": "Programa Embaixadores D'Furlan",
+    "totalSlides": 9,
+    "editable": true,
+    "source": "thread attachment file:9"
+  },
+  "theme": {
+    "tailwindThemeCss": "@theme {\n      --color-bg: #111216;\n      --color-bg-deep: #090a0d;\n      --color-surface: #1a1d23;\n      --color-text: #f7f4ee;\n      --color-text-secondary: #ddd5c8;\n      --color-text-muted: #b3aa9a;\n      --color-accent-1: #c89b3c;\n      --color-accent-2: #e6d3a5;\n      --color-accent-3: #8f6a25;\n      --color-glass-bg: rgba(255,255,255,0.06);\n      --color-glass-border: rgba(255,255,255,0.10);\n      --color-vignette: rgba(0,0,0,0.45);\n      --font-display: 'Playfair Display', serif;\n      --font-body: 'Inter', sans-serif;\n    }",
+    "baseCss": ":root { --color-bg: #111216; --color-text: #f7f4ee; --glow-color-rgb: 200,155,60; }\n    *, *::before, *::after { box-sizing: border-box; }\n    html, body { background: var(--color-bg); margin: 0; }\n    body { font-family: var(--font-body); color: var(--color-text); overflow: hidden; height: 100vh; width: 100vw; }\n    .deck { width: 100vw; height: 100vh; position: relative; }\n    .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.95); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; overflow: hidden; }\n    .slide.active { opacity: 1; transform: scale(1); pointer-events: all; }\n    .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1180px; padding: clamp(1.5rem, 4vw, 4rem); }\n    .nav-controls { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(17,18,22,0.55); backdrop-filter: blur(10px); padding: 10px 22px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.12); }\n    .nav-btn { width: 40px; height: 40px; border: none; background: rgba(255,255,255,0.08); color: #e6d3a5; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }\n    .slide-dots { display: flex; gap: 8px; }\n    .slide-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.18); cursor: pointer; transition: all .3s; }\n    .slide-dots .dot.active { background: #c89b3c; transform: scale(1.3); }\n    .slide-counter { font-size: .8rem; color: #ddd5c8; min-width: 48px; text-align: center; }\n    .reveal { opacity: 0; transform: translateY(20px); }\n    .gradient-mesh { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }\n    .blob { position: absolute; border-radius: 50%; filter: blur(80px); animation: float-slow 12s ease-in-out infinite; }\n    .blob:nth-child(2) { animation: float-drift 16s ease-in-out infinite; }\n    .blob:nth-child(3) { animation: float-slow 18s ease-in-out infinite reverse; }\n    .blob:nth-child(4) { animation: float-drift 20s ease-in-out infinite reverse; }\n    @keyframes float-slow { 0% { transform: translate(0,0) scale(1); } 25% { transform: translate(50px,-35px) scale(1.08); } 50% { transform: translate(-30px,25px) scale(.92); } 75% { transform: translate(30px,20px) scale(1.05);} 100% { transform: translate(0,0) scale(1);} }\n    @keyframes float-drift { 0% { transform: translate(0,0) scale(1) rotate(0deg); } 33% { transform: translate(-45px,-55px) scale(1.12) rotate(3deg); } 66% { transform: translate(40px,28px) scale(.9) rotate(-2deg);} 100% { transform: translate(0,0) scale(1) rotate(0deg);} }\n    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }\n    .slide::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background-image: url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E\"); background-repeat: repeat; background-size: 256px 256px; opacity: .025; mix-blend-mode: overlay; }\n    .slide::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse at center, transparent 48%, rgba(0,0,0,.45) 100%); }\n    .text-glow { text-shadow: 0 0 20px rgba(200,155,60,.45), 0 0 40px rgba(200,155,60,.18); }\n    .bar-track { width: 100%; height: 18px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden; }\n    .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #c89b3c, #e6d3a5); width: 0%; }\n    .card-hover { transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease; }\n    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 45px rgba(0,0,0,.22); border-color: rgba(230,211,165,.26); }\n    .logo-chip { background: rgba(255,255,255,.92); padding: 18px 28px; border-radius: 22px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 20px 60px rgba(0,0,0,.18); }\n    .section-label { letter-spacing: .22em; text-transform: uppercase; font-size: .78rem; color: #e6d3a5; }\n    .mini-kpi { border: 1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.05); backdrop-filter: blur(12px); border-radius: 18px; padding: 18px; }"
+  },
+  "assets": {
+    "fontLinks": [
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
+      "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap"
+    ],
+    "scriptLinks": [
+      "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+    ]
+  },
+  "slides": [
+    {
+      "id": 1,
+      "className": "slide-1 active",
+      "html": "<div class=\"gradient-mesh\">\n      <div class=\"blob\" style=\"width: 520px; height: 520px; top: -120px; right: -120px; background: #c89b3c; opacity: .16;\"></div>\n      <div class=\"blob\" style=\"width: 320px; height: 320px; bottom: -90px; left: -60px; background: #e6d3a5; opacity: .12;\"></div>\n      <div class=\"blob\" style=\"width: 230px; height: 230px; top: 42%; left: 12%; background: #8f6a25; opacity: .10;\"></div>\n      <div class=\"blob\" style=\"width: 180px; height: 180px; bottom: 18%; right: 14%; background: #d7b970; opacity: .08;\"></div>\n    </div>\n    <div class=\"content text-center\">\n      <div class=\"logo-chip reveal mx-auto mb-8 max-w-fit\">\n        <img src=\"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAoHBwgHBgoICAkLCgoLDhgQDg0NDh0VFhEYIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCwsLDw4PHRERHTIoIig6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ojo6Ov/AABEIAJQCHAMBIgACEQEDEQH/xAAbAAABBQEBAAAAAAAAAAAAAAADAAECBAUGB//EAEAQAAIBAgQEBAQEBAQFBQEAAAECEQADBBIhMQVBUQYiYXGBEzKRobHB0SNS4fAHFSQzYnKS8RZTgpOi/8QAGAEAAwEBAAAAAAAAAAAAAAAAAAECAwT/xAAdEQEBAAMBAQEBAQAAAAAAAAAAABERITFBUYEi/9oADAMBAAIRAxEAPwD8YREQBERAEREAREQBERAEREAREQBERAFKjV6yy1MqmaSXf6kxTnH5lmk0c6VcP8AcV+VYsqvYyqm8dJvWjaV6vHqL1bBTSXQG5Hlcx0h9m6Vyj4V0qL7L3ydjldvP0k8l+4iI7lBERAEREAREQBERAEREAREQBERAEREAV2nV0rW2W4x3h7dFj1zqG6Qq1NwtP1Wm5u7t2cfTn6i1r1o2eV1a9V8rPz5GQ6u6gnrY6Kk0qtq3dW2q1Wm2s0nXW0jJb8m8jN6eEJv0mIiO5QiIgCIiAIiIAiIgCIiAIiIAiIgCIiAK9Wq1l8h1J9Rk9lS0m9Q8Q1B1H4lM7J4k7m3rH1m1W6V5M8m7fI+9c6YfVw3Zbq5J1Z6nR1x8cX2m2J6m6q8qVv6l0T6iV+uJ5xERHZSIiAIiIAiIgCIiAIiIAiIgCIiAIiIAr1arWbqz1m0n0uW2dLq5m1n6V0eT7Pj5Pp7m+XyTq6L0tZ1m4cQ1O1Y2k3W7sJbWn3iZlLq3m5v1eRER2UiIgCIiAIiIAiIgCIiAIiIAiIgCIiAKnq1Zs6Wl1K3b3S0m4m6k6m4o7t7m3y4iLxjWk5vL8r1mQ1+q3V6dQdQ1bT1W5s1m7b7m+5mJERHZEIiIAiIgCIiAIiIAiIgCIiAIiIAiIgCr1arWf0m1q7N0tq6nWlq6nW5m3m7u7m5iIiO0kREQBERAEREAREQBERAEREAREQBERAEREAX//2Q==\" alt=\"D'Furlan Planejados\" class=\"max-h-[90px] max-w-[320px] object-contain\">\n      </div>\n      <p class=\"section-label reveal mb-5\">Programa de relacionamento e indicação</p>\n      <h1 class=\"font-display reveal text-[clamp(2.9rem,6vw,5.6rem)] leading-[0.95] tracking-tight bg-linear-to-br from-accent-1 via-accent-2 to-accent-1 bg-clip-text text-transparent mb-6\">Programa Embaixadores D'Furlan</h1>\n      <p class=\"reveal mx-auto max-w-[860px] text-[clamp(1rem,1.8vw,1.35rem)] text-text-secondary leading-relaxed\">Apresentação institucional do programa que transforma clientes satisfeitos em promotores da marca, com regras claras, critérios de elegibilidade, sistema de créditos e catálogo de recompensas para fortalecer indicação, recompra e fidelização.</p>\n    </div>"
+    },
+    {
+      "id": 2,
+      "className": "slide-2",
+      "html": "<div class=\"gradient-mesh\">\n      <div class=\"blob\" style=\"width: 420px; height: 420px; top: -80px; right: -60px; background: #c89b3c; opacity: .09;\"></div>\n      <div class=\"blob\" style=\"width: 280px; height: 280px; bottom: -60px; left: -40px; background: #e6d3a5; opacity: .07;\"></div>\n    </div>\n    <div class=\"content\">\n      <p class=\"section-label reveal mb-4\">Visão estratégica</p>\n      <h2 class=\"font-display text-[clamp(2.1rem,4.6vw,3.4rem)] reveal mb-8\">Por que este programa existe</h2>\n      <div class=\"grid grid-cols-3 gap-6\">\n        <div class=\"mini-kpi card-hover reveal\">\n          <h3 class=\"text-[1.4rem] font-semibold text-accent-2 mb-3\">Mais vendas</h3>\n          <p class=\"text-text-secondary leading-relaxed\">Aumenta a entrada de novos projetos por indicação qualificada, reduzindo dependência de vendas frias.</p>\n        </div>\n        <div class=\"mini-kpi card-hover reveal\">\n          <h3 class=\"text-[1.4rem] font-semibold text-accent-2 mb-3\">Mais retenção</h3>\n          <p class=\"text-text-secondary leading-relaxed\">Estimula recompra em novos ambientes, upgrades e complementos através do uso de créditos D'Furlan.</p>\n        </div>\n        <div class=\"mini-kpi card-hover reveal\">\n          <h3 class=\"text-[1.4rem] font-semibold text-accent-2 mb-3\">Mais valor de marca</h3>\n          <p class=\"text-text-secondary leading-relaxed\">Gera experiência memorável, prova social, depoimentos e relacionamento contínuo no pós-venda.</p>\n        </div>\n      </div>\n    </div>"
+    },
+    {
+      "id": 3,
+      "className": "slide-3",
+      "html": "<div class=\"gradient-mesh\">\n      <div class=\"blob\" style=\"width: 340px; height: 340px; top: -80px; right: -100px; background: #8f6a25; opacity: .09;\"></div>\n      <div class=\"blob\" style=\"width: 250px; height: 250px; bottom: -60px; left: -50px; background: #e6d3a5; opacity: .05;\"></div>\n    </div>\n    <div class=\"content\">\n      <p class=\"section-label reveal mb-4\">Funcionamento</p>\n      <h2 class=\"font-display text-[clamp(2rem,4.3vw,3.2rem)] reveal mb-8\">Como o ciclo do programa acontece</h2>\n      <div class=\"grid grid-cols-2 gap-6\">\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.3rem] font-semibold mb-3 text-accent-2\">1. O cliente indica</h3>\n          <p class=\"text-text-secondary\">O participante envia nome e contato de um novo potencial cliente alinhado ao perfil comercial da D'Furlan.</p>\n        </div>\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.3rem] font-semibold mb-3 text-accent-2\">2. A indicação é validada</h3>\n          <p class=\"text-text-secondary\">A equipe confere elegibilidade, ineditismo, aderência geográfica e potencial real de atendimento.</p>\n        </div>\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.3rem] font-semibold mb-3 text-accent-2\">3. O projeto avança</h3>\n          <p class=\"text-text-secondary\">Após orçamento aprovado, contrato assinado e início formal do projeto, a indicação é convertida em recompensa.</p>\n        </div>\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.3rem] font-semibold mb-3 text-accent-2\">4. O embaixador resgata</h3>\n          <p class=\"text-text-secondary\">Os créditos são lançados na conta do participante para uso em benefícios, brindes, experiências ou abatimentos.</p>\n        </div>\n      </div>\n    </div>"
+    },
+    {
+      "id": 4,
+      "className": "slide-4",
+      "html": "<div class=\"gradient-mesh\">\n      <div class=\"blob\" style=\"width: 380px; height: 380px; top: -100px; left: -80px; background: #c89b3c; opacity: .08;\"></div>\n      <div class=\"blob\" style=\"width: 240px; height: 240px; bottom: -70px; right: -50px; background: #e6d3a5; opacity: .06;\"></div>\n    </div>\n    <div class=\"content\">\n      <p class=\"section-label reveal mb-4\">Regras de entrada</p>\n      <h2 class=\"font-display text-[clamp(2rem,4.2vw,3.1rem)] reveal mb-8\">Critérios de elegibilidade</h2>\n      <div class=\"grid grid-cols-3 gap-6\">\n        <div class=\"mini-kpi reveal card-hover\"><h3 class=\"text-[1.25rem] font-semibold mb-3 text-accent-2\">Quem pode participar</h3><p class=\"text-text-secondary\">Clientes ativos ou já atendidos pela D'Furlan, convidados estratégicos e parceiros formalmente aceitos.</p></div>\n        <div class=\"mini-kpi reveal card-hover\"><h3 class=\"text-[1.25rem] font-semibold mb-3 text-accent-2\">O que torna a indicação válida</h3><p class=\"text-text-secondary\">Contato inédito, com potencial real de compra, fora da base já registrada e com autorização para abordagem comercial.</p></div>\n        <div class=\"mini-kpi reveal card-hover\"><h3 class=\"text-[1.25rem] font-semibold mb-3 text-accent-2\">Quando não pontua</h3><p class=\"text-text-secondary\">Contatos duplicados, leads sem aderência, projetos cancelados, cadastros incompletos ou indicações internas da própria operação.</p></div>\n      </div>\n    </div>"
+    },
+    {
+      "id": 5,
+      "className": "slide-5",
+      "html": "<div class=\"gradient-mesh\">\n      <div class=\"blob\" style=\"width: 360px; height: 360px; top: -80px; right: -80px; background: #8f6a25; opacity: .08;\"></div>\n      <div class=\"blob\" style=\"width: 280px; height: 280px; bottom: -80px; left: -40px; background: #c89b3c; opacity: .05;\"></div>\n    </div>\n    <div class=\"content\">\n      <p class=\"section-label reveal mb-4\">Modelo de recompensa</p>\n      <h2 class=\"font-display text-[clamp(2rem,4.2vw,3.1rem)] reveal mb-8\">Sistema de créditos e progressão</h2>\n      <div class=\"grid grid-cols-2 gap-8 items-start\">\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.35rem] font-semibold mb-4 text-accent-2\">Como os créditos são apurados</h3>\n          <p class=\"text-text-secondary mb-5 leading-relaxed\">Cada indicação aprovada e convertida gera créditos de acordo com o valor do projeto, campanha vigente, categoria do participante e eventuais bônus promocionais.</p>\n          <div class=\"space-y-4\">\n            <div>\n              <div class=\"flex justify-between text-sm mb-2\"><span class=\"text-text-secondary\">Indicação válida</span><span class=\"text-accent-2\">Base inicial</span></div>\n              <div class=\"bar-track\"><div class=\"bar-fill\" data-width=\"38\"></div></div>\n            </div>\n            <div>\n              <div class=\"flex justify-between text-sm mb-2\"><span class=\"text-text-secondary\">Projeto contratado</span><span class=\"text-accent-2\">Maior pontuação</span></div>\n              <div class=\"bar-track\"><div class=\"bar-fill\" data-width=\"76\"></div></div>\n            </div>\n            <div>\n              <div class=\"flex justify-between text-sm mb-2\"><span class=\"text-text-secondary\">Campanhas especiais</span><span class=\"text-accent-2\">Bônus extra</span></div>\n              <div class=\"bar-track\"><div class=\"bar-fill\" data-width=\"92\"></div></div>\n            </div>\n          </div>\n        </div>\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.35rem] font-semibold mb-4 text-accent-2\">Níveis do embaixador</h3>\n          <div class=\"space-y-4 text-text-secondary leading-relaxed\">\n            <p><strong class=\"text-text\">Essencial:</strong> entrada no programa, acesso ao cadastro, regras gerais e benefícios básicos.</p>\n            <p><strong class=\"text-text\">Destaque:</strong> alcançado por recorrência de indicações qualificadas, com prioridade em campanhas e experiências.</p>\n            <p><strong class=\"text-text\">Prestígio:</strong> nível premium para os maiores promotores da marca, com vantagens exclusivas e ativações especiais.</p>\n          </div>\n        </div>\n      </div>\n    </div>"
+    },
+    {
+      "id": 6,
+      "className": "slide-6",
+      "html": "<div class=\"gradient-mesh\">\n      <div class=\"blob\" style=\"width: 420px; height: 420px; top: -120px; right: -100px; background: #c89b3c; opacity: .10;\"></div>\n      <div class=\"blob\" style=\"width: 300px; height: 300px; bottom: -80px; left: -70px; background: #e6d3a5; opacity: .08;\"></div>\n    </div>\n    <div class=\"content\">\n      <p class=\"section-label reveal mb-4\">Portfólio de recompensas</p>\n      <h2 class=\"font-display text-[clamp(2rem,4.2vw,3.1rem)] reveal mb-8\">Tipos de prêmios e benefícios</h2>\n      <div class=\"grid grid-cols-3 gap-6\">\n        <div class=\"mini-kpi reveal card-hover\"><h3 class=\"text-[1.25rem] font-semibold mb-3 text-accent-2\">Brindes e presentes</h3><p class=\"text-text-secondary\">Itens de casa, utilidades, presentes corporativos, experiências gastronômicas e kits especiais.</p></div>\n        <div class=\"mini-kpi reveal card-hover\"><h3 class=\"text-[1.25rem] font-semibold mb-3 text-accent-2\">Crédito D'Furlan</h3><p class=\"text-text-secondary\">Abatimento em novos ambientes, complementos, upgrades, acessórios e futuras aquisições junto à marca.</p></div>\n        <div class=\"mini-kpi reveal card-hover\"><h3 class=\"text-[1.25rem] font-semibold mb-3 text-accent-2\">Experiências e ações VIP</h3><p class=\"text-text-secondary\">Convites, ativações exclusivas, lançamentos, eventos e ações de relacionamento para perfis de maior engajamento.</p></div>\n      </div>\n    </div>"
+    },
+    {
+      "id": 7,
+      "className": "slide-7",
+      "html": "<div class=\"gradient-mesh\">\n      <div class=\"blob\" style=\"width: 330px; height: 330px; top: -70px; left: -60px; background: #8f6a25; opacity: .08;\"></div>\n      <div class=\"blob\" style=\"width: 260px; height: 260px; bottom: -60px; right: -40px; background: #e6d3a5; opacity: .05;\"></div>\n    </div>\n    <div class=\"content\">\n      <p class=\"section-label reveal mb-4\">Governança</p>\n      <h2 class=\"font-display text-[clamp(2rem,4.2vw,3rem)] reveal mb-8\">Prazos, validade e política de resgate</h2>\n      <div class=\"grid grid-cols-2 gap-6\">\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.3rem] font-semibold mb-3 text-accent-2\">Janela operacional</h3>\n          <p class=\"text-text-secondary\">As indicações devem ser registradas dentro do canal oficial, observando período de campanha, vigência ativa do programa e prazos de apuração definidos pela empresa.</p>\n        </div>\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.3rem] font-semibold mb-3 text-accent-2\">Validade dos créditos</h3>\n          <p class=\"text-text-secondary\">Os créditos possuem prazo de utilização contado da liberação formal e podem expirar caso não sejam utilizados dentro do período comunicado no regulamento vigente.</p>\n        </div>\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.3rem] font-semibold mb-3 text-accent-2\">Resgate</h3>\n          <p class=\"text-text-secondary\">O resgate ocorre conforme saldo disponível, catálogo ativo, estoque, disponibilidade logística e política de aprovação interna da D'Furlan.</p>\n        </div>\n        <div class=\"mini-kpi reveal card-hover\">\n          <h3 class=\"text-[1.3rem] font-semibold mb-3 text-accent-2\">Não cumulatividade automática</h3>\n          <p class=\"text-text-secondary\">Campanhas promocionais podem ter regras próprias, limites de uso, teto por participante e restrições de acúmulo com outras ações comerciais.</p>\n        </div>\n      </div>\n    </div>"
+    },
+    {
+      "id": 8,
+      "className": "slide-8",
+      "html": "<div class=\"gradient-mesh\">\n      <div class=\"blob\" style=\"width: 390px; height: 390px; top: -100px; right: -90px; background: #c89b3c; opacity: .08;\"></div>\n      <div class=\"blob\" style=\"width: 270px; height: 270px; bottom: -70px; left: -50px; background: #e6d3a5; opacity: .07;\"></div>\n    </div>\n    <div class=\"content\">\n      <p class=\"section-label reveal mb-4\">Segurança do programa</p>\n      <h2 class=\"font-display text-[clamp(2rem,4.2vw,3rem)] reveal mb-8\">Controles, auditoria e integridade</h2>\n      <div class=\"grid grid-cols-3 gap-6\">\n        <div class=\"mini-kpi reveal card-hover\"><h3 class=\"text-[1.2rem] font-semibold mb-3 text-accent-2\">Auditoria de origem</h3><p class=\"text-text-secondary\">Toda indicação pode ser revisada para confirmar autoria, validade comercial, duplicidade e aderência às políticas da empresa.</p></div>\n        <div class=\"mini-kpi reveal card-hover\"><h3 class=\"text-[1.2rem] font-semibold mb-3 text-accent-2\">Prevenção de abuso</h3><p class=\"text-text-secondary\">Fraudes, autobenefício indevido, simulação de leads ou manipulação de cadastro podem gerar bloqueio imediato e cancelamento de benefícios.</p></div>\n        <div class=\"mini-kpi reveal card-hover\"><h3 class=\"text-[1.2rem] font-semibold mb-3 text-accent-2\">Ajustes regulatórios</h3><p class=\"text-text-secondary\">A D'Furlan poderá revisar catálogo, critérios, níveis e mecânicas, sempre preservando comunicação prévia e transparência institucional.</p></div>\n      </div>\n    </div>"
+    },
+    {
+      "id": 9,
+      "className": "slide-9",
+      "html": "<div class=\"gradient-mesh\">\n      <div class=\"blob\" style=\"width: 520px; height: 520px; top: -130px; right: -100px; background: #c89b3c; opacity: .14;\"></div>\n      <div class=\"blob\" style=\"width: 320px; height: 320px; bottom: -90px; left: -70px; background: #e6d3a5; opacity: .10;\"></div>\n      <div class=\"blob\" style=\"width: 180px; height: 180px; top: 35%; left: 16%; background: #8f6a25; opacity: .08;\"></div>\n    </div>\n    <div class=\"content text-center\">\n      <p class=\"section-label reveal mb-5\">Encerramento</p>\n      <h2 class=\"font-display reveal text-[clamp(2.6rem,5.4vw,4.8rem)] tracking-tight bg-linear-to-br from-accent-1 via-accent-2 to-accent-1 bg-clip-text text-transparent mb-6\">Relacionamento que gera valor contínuo</h2>\n      <p class=\"reveal mx-auto max-w-[860px] text-[clamp(1rem,1.8vw,1.28rem)] text-text-secondary leading-relaxed mb-8\">O Programa Embaixadores D'Furlan foi estruturado para reconhecer clientes que compartilham sua experiência com a marca, transformando confiança em crescimento, fidelidade e novas oportunidades de negócio.</p>\n      <div class=\"reveal inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/6 px-6 py-3 text-text-secondary backdrop-blur-xl\">\n        <span class=\"text-accent-2 font-semibold\">D'Furlan Planejados</span>\n        <span>•</span>\n        <span>Programa institucional de indicação e recompensas</span>\n      </div>\n    </div>"
+    }
+  ],
+  "navigation": {
+    "hasDots": true,
+    "hasCounter": true,
+    "script": "let current = 1;\n  const total = document.querySelectorAll('.slide').length;\n  const dotsContainer = document.getElementById('dots');\n  const counter = document.getElementById('counter');\n  for (let i = 1; i <= total; i++) {\n    const dot = document.createElement('div');\n    dot.className = 'dot' + (i === 1 ? ' active' : '');\n    dot.onclick = () => goToSlide(i);\n    dotsContainer.appendChild(dot);\n  }\n  function goToSlide(n) {\n    const prev = document.querySelector('.slide.active');\n    const next = document.querySelector(`.slide[data-slide=\"${n}\"]`);\n    if (prev) prev.classList.remove('active');\n    if (next) { next.classList.add('active'); animateSlide(next); }\n    current = n; updateNav();\n  }\n  function changeSlide(dir) {\n    let next = current + dir;\n    if (next < 1) next = total;\n    if (next > total) next = 1;\n    goToSlide(next);\n  }\n  function updateNav() {\n    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i + 1 === current));\n    counter.textContent = `${current} / ${total}`;\n  }\n  function animateSlide(slide) {\n    slide.querySelectorAll('.reveal').forEach((el, i) => {\n      el.style.transition = 'none';\n      el.style.opacity = '0';\n      el.style.transform = 'translateY(20px)';\n      el.offsetHeight;\n      const delay = i * 0.08;\n      el.style.transition = `opacity .42s ease ${delay}s, transform .42s ease ${delay}s`;\n      el.style.opacity = '1';\n      el.style.transform = 'translateY(0)';\n    });\n    slide.querySelectorAll('.bar-fill').forEach((bar, i) => {\n      bar.style.width = '0%';\n      bar.style.transition = `width .65s ease ${i * 0.1}s`;\n      bar.offsetHeight;\n      bar.style.width = (bar.dataset.width || '0') + '%';\n    });\n  }\n  document.addEventListener('keydown', (e) => {\n    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }\n    if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }\n  });\n  let touchStartX = 0;\n  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });\n  document.addEventListener('touchend', e => {\n    const diff = touchStartX - e.changedTouches[0].clientX;\n    if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1);\n  });\n  animateSlide(document.querySelector('.slide.active'));"
+  }
+};
+
+        // Render slides from JSON
+        function renderSlides() {
+            const deck = document.getElementById('deck');
+            const dotsContainer = document.getElementById('dots');
+            const total = presentationData.slides.length;
+            
+            presentationData.slides.forEach((slide, index) => {
+                const slideEl = document.createElement('div');
+                slideEl.className = `slide ${slide.className}`;
+                slideEl.setAttribute('data-slide', slide.id);
+                slideEl.innerHTML = slide.html;
+                deck.appendChild(slideEl);
+            });
+
+            // Create dots
+            for (let i = 1; i <= total; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot' + (i === 1 ? ' active' : '');
+                dot.onclick = () => goToSlide(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Navigation
+        let current = 1;
+        const total = presentationData.slides.length;
+        const counter = document.getElementById('counter');
+
+        function goToSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            const prevSlide = document.querySelector('.slide.active');
+            
+            if (prevSlide) prevSlide.classList.remove('active');
+            
+            const nextSlide = slides[n - 1];
+            if (nextSlide) {
+                nextSlide.classList.add('active');
+                animateSlide(nextSlide);
+            }
+            
+            current = n;
+            updateNav();
+        }
+
+        function changeSlide(dir) {
+            let next = current + dir;
+            if (next < 1) next = total;
+            if (next > total) next = 1;
+            goToSlide(next);
+        }
+
+        function updateNav() {
+            document.querySelectorAll('.dot').forEach((d, i) => {
+                d.classList.toggle('active', i + 1 === current);
+            });
+            counter.textContent = `${current} / ${total}`;
+        }
+
+        function animateSlide(slide) {
+            slide.querySelectorAll('.reveal').forEach((el, i) => {
+                el.style.transition = 'none';
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.offsetHeight;
+                const delay = i * 0.08;
+                el.style.transition = `opacity .42s ease ${delay}s, transform .42s ease ${delay}s`;
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            });
+            
+            slide.querySelectorAll('.bar-fill').forEach((bar, i) => {
+                bar.style.width = '0%';
+                bar.style.transition = `width .65s ease ${i * 0.1}s`;
+                bar.offsetHeight;
+                bar.style.width = (bar.dataset.width || '0') + '%';
+            });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            }
+        });
+
+        // Touch navigation
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+        });
+        document.addEventListener('touchend', e => {
+            const diff = touchStartX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) {
+                changeSlide(diff > 0 ? 1 : -1);
+            }
+        });
+
+        // Initialize
+        renderSlides();
+        animateSlide(document.querySelector('.slide.active'));
+    </script>
+</body>
+</html>
